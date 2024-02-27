@@ -5,11 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
     <script>
-      const token = document.cookie; ;
-      console.log(token);
-      if (!token) {
-        window.location.href = "index.html";
-        return;
+      if (document.cookie === "") {
+        window.location.href = "http://127.0.0.1:5500/index.html";
       }
     </script>
   </head>
