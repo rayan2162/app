@@ -1,16 +1,117 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
-    <script>
-      if (document.cookie === "") {
-        window.location.href = "http://127.0.0.1:5500/index.html";
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="app.css">
+  <link rel="shortcut icon" href="logo.png" type="image/x-icon" />
+  <title>App</title>
+  <script>
+    if (document.cookie === "") {
+      window.location.href = "index.html";
+    }
+    const logout = () => {
+      document.cookie = '';
+      window.location.href = "index.html";
+    }
+  </script>
+</head>
+
+<body>
+  <div class="navigation">
+    <button class="btn" onclick="logout()">Logout</button>
+  </div>
+  <div class="upperCard">
+
+
+    <div class="uCardChild">
+      <h3>TODO</h3>
+      <div id="newTodo">
+        <input type="text" class="input-field" name="" id="" placeholder="Add Todo">
+        <button id="pushTodo" class="btn">Add</button>
+      </div>
+      <div id="todo">
+      </div>
+    </div>
+
+
+    <div class="uCardChild">
+      <h3>Habit Tracker</h3>
+      <input id="inputText" />
+      <button onclick="pushData();">Add</button>
+      <div id="view">
+      </div>
+    </div>
+
+
+    <h3>Note</h3>
+  </div>
+  </div>
+  <br>
+
+  <div class="lowerCard">
+    routine
+  </div>
+
+  <!-- JavaScript -->
+
+  <script>
+    // todo
+    document.querySelector('#newTodo').onclick = function () {
+      document.querySelector('#todo').innerHTML += `
+        <div class='todo'>
+          <span id='todoName'>
+            ${document.querySelector('#newTodo input').value}
+          </span>
+        <button class="btn delete">
+          X
+        </button>
+        </div>
+        `;
+      let currentTodo = document.querySelectorAll(".delete");
+      for (let i = 0; i < currentTodo.length; i++) {
+        currentTodo[i].onclick = function () {
+          this.parentNode.remove();
+        }
       }
-    </script>
-  </head>
-  <body>
-    <h1>ok</h1>
-  </body>
+    }
+
+
+// *************************************************
+// *************************************************
+    // Habit tracker
+
+function pushData() {
+  // Get references to elements
+  let view = document.getElementById("view");
+  let inputText = document.getElementById("inputText").value;
+
+// Create the text node
+var node = document.createTextNode(inputText);
+ 
+// Create the button with specified id and class
+let deleteButton = document.createElement("button");
+  deleteButton.id = "deleteButton";
+  deleteButton.classList.add("btn");
+  deleteButton.textContent = "X"; 
+
+  deleteButton.onclick = function() {
+    removeDiv.remove();
+  };
+
+let newTd = document.createElement("div");
+
+newTd.appendChild(node);
+  newTd.appendChild(deleteButton);
+
+  // Append the container element to the view
+  view.appendChild(newTd);
+
+}
+  </script>
+
+
+</body>
+
 </html>

@@ -1,0 +1,42 @@
+*{
+    font-family: sans-serif;
+    margin: 0%;
+}
+.navigation{
+    padding: 10px;
+}
+.upperCard{
+    background-color: skyblue;
+    padding: 10px;
+    height: 100%;
+    display: flex;
+}
+.uCardChild{
+    background-color: palegreen;
+    float: left;
+    padding: 10px;
+    border: solid black;
+    border-radius: 10px;
+    margin-right: 10px;
+}
+
+.lowerCard{
+    background-color: yellow;
+}
+.btn {
+    padding: 10px 20px;
+    border: solid black;
+    border-radius: 10px;
+    background-color: white;
+    color: black;
+  }
+  .btn:hover {
+    background-color: black;
+    color: white;
+  }
+  .input-field {
+    text-align: center;
+    border: solid;
+    border-radius: 10px;
+    padding: 10px;
+  }
