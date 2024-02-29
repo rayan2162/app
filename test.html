@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>test</title>
+</head>
+<body>
+    <div class="container">
+        <h1>test</h1>
+        <div class="parent">
+            <input type="text" name="" id="textInput" placeholder="text">
+            <br><br>
+            <button onclick="add()">Add</button>
+        </div>
+        <div id="child">
+
+        </div>
+    </div>
+    <div class="container2">
+        <form>
+            <input type="text" name="name" placeholder="name">
+            <button type="submit">Submit</button>
+        </form>
+        <div id="data"></div>
+    </div>
+    <script>
+        let delBtn;
+        function add(){
+            let text = document.getElementById("textInput").value;
+            const newDiv = document.createElement("div");
+            delBtn = document.createElement("button");
+            delBtn.textContent = "Delete";
+            
+            const node = document.createTextNode(text);
+            
+            newDiv.appendChild(node);
+            newDiv.appendChild(delBtn);
+
+            const newPos = document.getElementById("child");
+            newPos.appendChild(newDiv);
+
+            //
+            //localStorage.setItem(text)
+            //
+
+
+            delBtn.addEventListener('click', function(){
+                //newDiv.removeChild(this);
+                newDiv.remove();
+            });
+        }
+        
+
+        //*********************************
+        const form = document.querySelector('form');
+
+        form.addEventListener('submit', (e)=>{
+            const formData = new FormData(form);
+            const obj = Object.fromEntries(formData);
+
+            const json = JSON.stringify(obj);
+            localStorage.setItem('form',json);
+
+            const json2 = localStorage.getItem('form');
+            const obj2 = JSON.parse(json2);
+            for(key in obj2){
+                const markup =`
+                <div>
+                    <span>${key}:${obj2[key]}</span>
+                </div>
+                `;
+                document.getElementById('data').innerHTML+=markup;
+            }
+
+        });
+
+    </script>
+
+</body>
+</html>

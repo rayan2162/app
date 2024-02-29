@@ -38,20 +38,30 @@
 
     <div class="uCardChild">
       <h3>Habit Tracker</h3>
-      <input id="inputText" />
-      <button onclick="pushData();">Add</button>
-      <div id="view">
-      </div>
+      <input type="text" id="new-todo" placeholder="Add a new task">
+    <button id="add-button">Add</button>
+    <ul id="todos"></ul>
     </div>
 
-
+    <div class="uCardChild">
     <h3>Note</h3>
+    <textarea id="note-area" placeholder="Start typing your note here..."></textarea>
+    <button id="save-button">Save Draft</button>
   </div>
   </div>
+  
   <br>
 
   <div class="lowerCard">
     routine
+    <div id="kanban-board">
+      <h2>To Do</h2>
+      <ul id="todo-list"></ul>
+      <h2>In Progress</h2>
+      <ul id="in-progress-list"></ul>
+      <h2>Done</h2>
+      <ul id="done-list"></ul>
+  </div>
   </div>
 
   <!-- JavaScript -->
@@ -82,33 +92,154 @@
 // *************************************************
     // Habit tracker
 
-function pushData() {
-  // Get references to elements
-  let view = document.getElementById("view");
-  let inputText = document.getElementById("inputText").value;
+    const todoList = document.getElementById('todos');
+const newTodoInput = document.getElementById('new-todo');
+const addButton = document.getElementById('add-button');
 
-// Create the text node
-var node = document.createTextNode(inputText);
- 
-// Create the button with specified id and class
-let deleteButton = document.createElement("button");
-  deleteButton.id = "deleteButton";
-  deleteButton.classList.add("btn");
-  deleteButton.textContent = "X"; 
+// Define a key for local storage
+const LOCAL_STORAGE_KEY = 'todos';
 
-  deleteButton.onclick = function() {
-    removeDiv.remove();
-  };
-
-let newTd = document.createElement("div");
-
-newTd.appendChild(node);
-  newTd.appendChild(deleteButton);
-
-  // Append the container element to the view
-  view.appendChild(newTd);
-
+function getTodosFromStorage() {
+  const todosJSON = localStorage.getItem(LOCAL_STORAGE_KEY);
+  if (todosJSON) {
+    return JSON.parse(todosJSON);
+  } else {
+    return [];
+  }
 }
+
+function setTodosToStorage(todos) {
+  localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(todos));
+}
+
+// Load existing todos from local storage on page load
+const todos = getTodosFromStorage();
+
+todos.forEach(todo => {
+  const newTodoItem = document.createElement('li');
+  newTodoItem.textContent = todo.text;
+
+  // Add delete button
+  const deleteButton = document.createElement('button');
+  deleteButton.textContent = 'Delete';
+  deleteButton.classList.add('delete-button');
+  newTodoItem.appendChild(deleteButton);
+
+  // Add functionality to mark as done
+  newTodoItem.addEventListener('click', function() {
+    newTodoItem.classList.toggle('done');
+  });
+
+  // Add functionality to delete
+  deleteButton.addEventListener('click', function() {
+    todoList.removeChild(newTodoItem);
+    const updatedTodos = todos.filter(t => t.text !== newTodoItem.textContent);
+    setTodosToStorage(updatedTodos);
+  });
+
+  todoList.appendChild(newTodoItem);
+});
+
+addButton.addEventListener('click', function() {
+  const newTodoText = newTodoInput.value.trim();
+
+  if (newTodoText) {
+    const newTodoItem = document.createElement('li');
+    newTodoItem.textContent = newTodoText;
+
+    // Add delete button
+    const deleteButton = document.createElement('button');
+    deleteButton.textContent = 'Delete';
+    deleteButton.classList.add('delete-button');
+    newTodoItem.appendChild(deleteButton);
+
+    // Add functionality to mark as done
+    newTodoItem.addEventListener('click', function() {
+      newTodoItem.classList.toggle('done');
+    });
+
+    // Add functionality to delete
+    deleteButton.addEventListener('click', function() {
+      todoList.removeChild(newTodoItem);
+      const updatedTodos = todos.filter(t => t.text !== newTodoItem.textContent);
+      setTodosToStorage(updatedTodos);
+    });
+
+    todos.push({ text: newTodoText }); // Add new todo object to the array
+    setTodosToStorage(todos); // Update local storage
+
+    todoList.appendChild(newTodoItem);
+    newTodoInput.value = '';
+  }
+});
+
+
+
+// Note
+const noteArea = document.getElementById('note-area');
+const saveButton = document.getElementById('save-button');
+
+const LOCAL_STORAGE_KEY = 'my_notes';
+
+function loadFromStorage() {
+  const savedNotes = localStorage.getItem(LOCAL_STORAGE_KEY);
+  if (savedNotes) {
+    noteArea.value = savedNotes;
+  }
+}
+
+function saveToStorage() {
+  const currentNotes = noteArea.value;
+  localStorage.setItem(LOCAL_STORAGE_KEY, currentNotes);
+}
+
+saveButton.addEventListener('click', function() {
+  saveToStorage();
+});
+
+loadFromStorage(); // Load existing notes on page load
+
+
+// Routine
+//******************************
+function allowDrop(event) {
+    event.preventDefault();
+  }
+
+  function drag(event) {
+    event.dataTransfer.setData("text", event.target.id);
+  }
+
+  function drop(event) {
+    event.preventDefault();
+    var data = event.dataTransfer.getData("text");
+    var draggedElement = document.getElementById(data);
+    var targetColumn = event.target.closest('.column');
+
+    if (targetColumn) {
+      targetColumn.appendChild(draggedElement);
+    }
+  }
+
+  // Create sample tasks
+  createTask("time", "Task 1");
+  createTask("task", "Task 2");
+  createTask("temp", "Task 3");
+
+  function createTask(columnId, taskText) {
+    var column = document.getElementById(columnId);
+    var task = document.createElement("div");
+    task.className = "task";
+    task.draggable = true;
+    task.id = "task" + (column.children.length + 1);
+    task.textContent = taskText;
+    task.addEventListener("dragstart", drag);
+    column.appendChild(task);
+  }
+
+
+
+
   </script>
 
 
